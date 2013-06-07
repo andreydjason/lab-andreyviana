@@ -1,0 +1,133 @@
+<?php
+// MAINTENANCE
+define('MAINTENANCE', FALSE);
+define('MAINTENANCE_ADMIN', FALSE);
+
+if (MAINTENANCE === TRUE) {
+  if (MAINTENANCE_ADMIN === TRUE) {
+    require('maintenance.php');
+    die();
+  }
+
+  if ($_SERVER['REMOTE_ADDR'] != '127.0.0.1') {
+    require('maintenance.php');
+    die();
+  }
+}
+
+////////////////////////////////////////////////////////////
+$handle = opendir(".");
+$projectsListIgnore = array ('.','..','www_assets');
+
+$ul_html = '<ul class="">';
+
+$projectContents = $ul_html;
+$labProjectContents = $ul_html;
+$personalProjectContents = $ul_html;
+
+while ($file = readdir($handle)) 
+{
+  if (is_dir($file) && !in_array($file,$projectsListIgnore) && strpos($file, 'sublime-') === false && strpos($file, 'meteor') === false) {
+    if (strpos($file, 'work_') !== false) {
+      $projectContents .= '<li><a href="'.$file.'">'.ucwords(str_replace('work_', '', $file)).'</a></li>';
+    }
+  }
+}
+
+if ($projectContents == $ul_html) {
+  $projectContents = 'Nenhum projeto encontrado';
+} else {
+  $projectContents .= '</ul>';
+}
+
+closedir($handle);
+?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>Andrey D. Viana - Laboratório</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Andrey D. Viana - Laboratório &map; Projetos">
+    <meta name="author" content="Andrey D. Viana">
+
+    <link href="/www_assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/www_assets/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="/www_assets/css/website-base.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/www_assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/www_assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/www_assets/ico/apple-touch-icon-114-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/www_assets/ico/apple-touch-icon-72-precomposed.png">
+                    <link rel="apple-touch-icon-precomposed" href="/www_assets/ico/apple-touch-icon-57-precomposed.png">
+                                   <link rel="shortcut icon" href="/www_assets/ico/favicon.png">
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <div class="masthead">
+        <h3 class="muted">Andrey D. Viana - Laboratório</h3>
+        <div class="navbar">
+          <div class="navbar-inner">
+            <div class="container">
+              <ul class="nav">
+                <li class="active"><a href="#">Projetos</a></li>
+              </ul>
+            </div>
+          </div>
+        </div><!-- /.navbar -->
+      </div>
+
+      <div class="row">
+        <div class="span12">
+          <!-- <h3>...</h3> -->
+          <?php echo $projectContents ?>
+        </div>
+      </div>
+
+      <hr>
+
+      <!-- <div class="row-fluid">
+        <div class="span4">
+          <h2>Heading</h2>
+          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+          <p><a class="btn" href="#">View details &raquo;</a></p>
+        </div>
+        <div class="span4">
+          <h2>Heading</h2>
+          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+          <p><a class="btn" href="#">View details &raquo;</a></p>
+       </div>
+        <div class="span4">
+          <h2>Heading</h2>
+          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.</p>
+          <p><a class="btn" href="#">View details &raquo;</a></p>
+        </div>
+      </div> -->
+
+      <hr>
+
+      <div class="footer">
+        <p>&copy; <?php echo date("Y") ?> Andrey D. Viana - Laboratório</p>
+      </div>
+
+    </div><!-- /container -->
+
+    <script src="/www_assets/js/jquery-1.9.1.min.js"></script>
+    <script src="/www_assets/js/bootstrap.min.js"></script>
+    <script src="/www_assets/js/consolelog.js"></script>
+    <script src="/www_assets/js/consolelog.detailprint.js"></script>
+    <script src="/www_assets/js/website-plugins.js"></script>
+    <script src="/www_assets/js/website-base.js"></script>
+
+  </body>
+</html>
